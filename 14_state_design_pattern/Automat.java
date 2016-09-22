@@ -13,10 +13,9 @@ public class Automat implements AutomateInterface {
 		waitingState = new WaitingState(this);
 		gotApplicationState = new GotApplicationState(this);
 		apartmentRentedState = new ApartmentRentedState(this);
-		waitingState = new WaitingState(this);
 		state = waitingState;
 	}
-
+	/** gotApplication, checkApplication and rentApartment: Methods used to testing **/
 	public void gotApplication() {
 		System.out.println(state.gotApplication());
 	}
@@ -28,6 +27,14 @@ public class Automat implements AutomateInterface {
 	public void rentApartment() {
 		System.out.println(state.rentApartment());
 		System.out.println(state.dispenseKeys());
+	}
+
+	public State getWaitingState() {	 
+		return waitingState;
+	}
+
+	public State getGotApplicationState() {
+		return gotApplicationState;
 	}
 
 	public State getApartmentRentedState() {
