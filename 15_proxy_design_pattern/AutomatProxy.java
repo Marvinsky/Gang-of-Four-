@@ -1,0 +1,53 @@
+
+import java.io.*;
+import java.net.*;
+public class AutomatProxy implements Runnable {
+	private Thread thread;
+	Socket socket;
+	PrintWriter out;
+	int character;
+	InputStream in;
+
+	public AutomatProxy() {
+		try {
+			socket = new Socket("127.0.0.1", 8765);
+			System.out.println("Connecting...");
+
+			in = socket.getInputStream();
+			out = new PrintWriter(socket.getOutputStream(), true);
+			thread = new Thread(this);
+			thread.start();
+		} catch (IOException e) {
+			System.out.println("The server must be running.");
+			System.err.println("Not connected: " + e);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+
+		if (socket != null && socket.isConnected()) {
+			System.out.println("Connected");
+		}
+	}
+
+	public void gotApplication() {
+		out.println("gotApplication");
+	}
+
+	public void checkApplication() {
+		out.println("checkApplication");
+	}
+
+	public void rentApartment() {
+		out.println("rentApartment");
+	}
+	
+	public void run() {
+		try {
+			while ((character = in.read()) != -1) {
+				System.out.print((char)character);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+}

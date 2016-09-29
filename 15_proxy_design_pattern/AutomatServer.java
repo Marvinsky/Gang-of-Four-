@@ -1,17 +1,28 @@
 import java.io.*;
 import java.net.*;
-public class AutomateServer implements Runnable, AutomateInterface {
+public class AutomatServer implements Runnable, AutomateInterface {
 	State state;
 	State waitingState;
 	State gotApplicationState;
 	State apartmentRentedState;
+	State fullyRentedState;
 	int count;
+	ServerSocket socket;
+	Socket communicationSocket;
+	PrintWriter out;
+	private Thread thread;
 
-	public AutomateServer() {
+
+	public static void main(String args[]) {
+		AutomatServer d = new AutomatServer();
+	}
+
+	public AutomatServer() {
 		count = 9;
 		waitingState = new WaitingState(this);
 		gotApplicationState = new GotApplicationState(this);
 		apartmentRentedState = new ApartmentRentedState(this);
+		waitingState = new WaitingState(this);
 		state = waitingState;
 
 		try {
@@ -36,7 +47,7 @@ public class AutomateServer implements Runnable, AutomateInterface {
 					gotApplication();
 				} else if (incomingString.equals("checkApplication")) {
 					checkApplication();
-				} else if (inommingString.equals("rentApartment")) {
+				} else if (incomingString.equals("rentApartment")) {
 					rentApartment();
 				}
 			}
@@ -44,6 +55,47 @@ public class AutomateServer implements Runnable, AutomateInterface {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public void gotApplication() {
+		out.println(state.gotApplication());
+	}
+
+	public void checkApplication() {
+		out.println(state.checkApplication());
+	}
+
+	public void rentApartment() {
+		out.println(state.rentApartment());
+		out.println(state.dispenseKeys());
+	}
+
+	public State getWaitingState() {
+		return waitingState;
+	}
+
+	public State getGotApplicationState() {
+		return gotApplicationState;
+	}
+
+	public State getApartmentRentedState() {
+		return apartmentRentedState;
+	}
+
+	public State getFullyRentedState() {
+		return fullyRentedState;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int n) {
+		count = n;
+	}
+
+	public void setState(State s) {
+		state = s;
 	}
 }
 
